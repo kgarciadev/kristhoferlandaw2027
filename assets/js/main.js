@@ -1,98 +1,215 @@
-/*!
- * Ledgerline — Bootstrap 6 fintech template
- */
+/**
+* Template Name: Knight
+* Template URL: https://bootstrapmade.com/knight-free-bootstrap-theme/
+* Updated: Oct 16 2024 with Bootstrap v5.3.3
+* Author: BootstrapMade.com
+* License: https://bootstrapmade.com/license/
+*/
 
-import { initBase, onReady } from './base.js'
+(function() {
+  "use strict";
 
-const gbp = (n, dp = 0) => n.toLocaleString('en-GB', {
-  style: 'currency', currency: 'GBP', minimumFractionDigits: dp, maximumFractionDigits: dp,
-})
+  /**
+   * Apply .scrolled class to the body as the page is scrolled down
+   */
+  function toggleScrolled() {
+    const selectBody = document.querySelector('body');
+    const selectHeader = document.querySelector('#header');
+    if (!selectHeader.classList.contains('scroll-up-sticky') && !selectHeader.classList.contains('sticky-top') && !selectHeader.classList.contains('fixed-top')) return;
+    window.scrollY > 100 ? selectBody.classList.add('scrolled') : selectBody.classList.remove('scrolled');
+  }
 
-/* Plan pricing calculator.
- *
- * Every SaaS pricing page puts three tiers side by side and leaves the visitor
- * to work out which one is actually cheapest for them — which is convenient,
- * because the answer is often the free one. This does the arithmetic instead,
- * and names the exact volume where the next plan up takes over.
- *
- * Plans arrive as JSON on the element rather than being hardcoded here, so the
- * table, the cards and the maths are all fed from the same list in build.py and
- * cannot drift apart.
- */
-const initCalculator = () => {
-  document.querySelectorAll('[data-calc]').forEach((root) => {
-    let plans
-    try { plans = JSON.parse(root.dataset.plans) } catch { return }
-    if (!Array.isArray(plans) || !plans.length) return
+  document.addEventListener('scroll', toggleScrolled);
+  window.addEventListener('load', toggleScrolled);
 
-    const count = root.querySelector('#calcCount')
-    const avg = root.querySelector('#calcAvg')
-    const countOut = root.querySelector('#calcCountOut')
-    const avgOut = root.querySelector('#calcAvgOut')
-    const volume = root.querySelector('[data-volume]')
-    const note = root.querySelector('[data-crossover]')
-    if (!count || !avg) return
+  /**
+   * Mobile nav toggle
+   */
+  const mobileNavToggleBtn = document.querySelector('.mobile-nav-toggle');
 
-    // Monthly bill: the platform fee plus a per-payment charge that is itself a
-    // percentage of the basket plus a flat amount.
-    const costOf = (plan, n, basket) => plan.base + n * (plan.pct * basket + plan.fixed)
+  function mobileNavToogle() {
+    document.querySelector('body').classList.toggle('mobile-nav-active');
+    mobileNavToggleBtn.classList.toggle('bi-list');
+    mobileNavToggleBtn.classList.toggle('bi-x');
+  }
+  if (mobileNavToggleBtn) {
+    mobileNavToggleBtn.addEventListener('click', mobileNavToogle);
+  }
 
-    // Where two plans cost the same. Positive only when the pricier base buys a
-    // cheaper per-payment rate — otherwise that plan never wins and there is no
-    // crossover to quote.
-    const crossover = (cheap, dear, basket) => {
-      const perCheap = cheap.pct * basket + cheap.fixed
-      const perDear = dear.pct * basket + dear.fixed
-      const gap = perCheap - perDear
-      if (gap <= 0) return null
-      return Math.ceil((dear.base - cheap.base) / gap)
+  /**
+   * Hide mobile nav on same-page/hash links
+   */
+  document.querySelectorAll('#navmenu a').forEach(navmenu => {
+    navmenu.addEventListener('click', () => {
+      if (document.querySelector('.mobile-nav-active')) {
+        mobileNavToogle();
+      }
+    });
+
+  });
+
+  /**
+   * Toggle mobile nav dropdowns
+   */
+  document.querySelectorAll('.navmenu .toggle-dropdown').forEach(navmenu => {
+    navmenu.addEventListener('click', function(e) {
+      e.preventDefault();
+      this.parentNode.classList.toggle('active');
+      this.parentNode.nextElementSibling.classList.toggle('dropdown-active');
+      e.stopImmediatePropagation();
+    });
+  });
+
+  /**
+   * Preloader
+   */
+  const preloader = document.querySelector('#preloader');
+  if (preloader) {
+    window.addEventListener('load', () => {
+      preloader.remove();
+    });
+  }
+
+  /**
+   * Scroll top button
+   */
+  let scrollTop = document.querySelector('.scroll-top');
+
+  function toggleScrollTop() {
+    if (scrollTop) {
+      window.scrollY > 100 ? scrollTop.classList.add('active') : scrollTop.classList.remove('active');
     }
+  }
+  scrollTop.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  });
 
-    const render = () => {
-      const n = Number(count.value)
-      const basket = Number(avg.value)
+  window.addEventListener('load', toggleScrollTop);
+  document.addEventListener('scroll', toggleScrollTop);
 
-      if (countOut) countOut.textContent = n.toLocaleString('en-GB')
-      if (avgOut) avgOut.textContent = gbp(basket)
-      if (volume) volume.textContent = gbp(n * basket)
+  /**
+   * Animation on scroll function and init
+   */
+  function aosInit() {
+    AOS.init({
+      duration: 600,
+      easing: 'ease-in-out',
+      once: true,
+      mirror: false
+    });
+  }
+  window.addEventListener('load', aosInit);
 
-      const totals = plans.map((p) => ({ plan: p, total: costOf(p, n, basket) }))
-      const best = totals.reduce((a, b) => (b.total < a.total ? b : a))
+  /**
+   * Init swiper sliders
+   */
+  function initSwiper() {
+    document.querySelectorAll(".init-swiper").forEach(function(swiperElement) {
+      let config = JSON.parse(
+        swiperElement.querySelector(".swiper-config").innerHTML.trim()
+      );
 
-      totals.forEach(({ plan, total }) => {
-        const card = root.querySelector(`[data-plan="${plan.key}"]`)
-        if (!card) return
-        const isBest = plan.key === best.plan.key
-        card.classList.toggle('is-best', isBest)
-        const flag = card.querySelector('[data-best]')
-        if (flag) flag.hidden = !isBest
-        card.querySelector('[data-total]').textContent = gbp(total)
-        // What the bill works out to as a share of money processed — the number
-        // that actually lets you compare two plans priced differently.
-        card.querySelector('[data-eff]').textContent =
-          n * basket > 0 ? `${((total / (n * basket)) * 100).toFixed(2)}%` : '—'
-      })
+      if (swiperElement.classList.contains("swiper-tab")) {
+        initSwiperWithCustomPagination(swiperElement, config);
+      } else {
+        new Swiper(swiperElement, config);
+      }
+    });
+  }
 
-      if (!note) return
-      const i = plans.findIndex((p) => p.key === best.plan.key)
-      const parts = []
-      const up = plans[i + 1] && crossover(plans[i], plans[i + 1], basket)
-      const down = plans[i - 1] && crossover(plans[i - 1], plans[i], basket)
+  window.addEventListener("load", initSwiper);
 
-      if (down) parts.push(`${plans[i - 1].name} is cheaper below ${down.toLocaleString('en-GB')} payments`)
-      if (up) parts.push(`${plans[i + 1].name} takes over above ${up.toLocaleString('en-GB')}`)
+  /**
+   * Initiate glightbox
+   */
+  const glightbox = GLightbox({
+    selector: '.glightbox'
+  });
 
-      note.textContent = parts.length
-        ? `${best.plan.name} is cheapest for you — ${parts.join(', and ')}, at this average payment.`
-        : `${best.plan.name} is cheapest for you at this average payment.`
+  /**
+   * Init isotope layout and filters
+   */
+  document.querySelectorAll('.isotope-layout').forEach(function(isotopeItem) {
+    let layout = isotopeItem.getAttribute('data-layout') ?? 'masonry';
+    let filter = isotopeItem.getAttribute('data-default-filter') ?? '*';
+    let sort = isotopeItem.getAttribute('data-sort') ?? 'original-order';
+
+    let initIsotope;
+    imagesLoaded(isotopeItem.querySelector('.isotope-container'), function() {
+      initIsotope = new Isotope(isotopeItem.querySelector('.isotope-container'), {
+        itemSelector: '.isotope-item',
+        layoutMode: layout,
+        filter: filter,
+        sortBy: sort
+      });
+    });
+
+    isotopeItem.querySelectorAll('.isotope-filters li').forEach(function(filters) {
+      filters.addEventListener('click', function() {
+        isotopeItem.querySelector('.isotope-filters .filter-active').classList.remove('filter-active');
+        this.classList.add('filter-active');
+        initIsotope.arrange({
+          filter: this.getAttribute('data-filter')
+        });
+        if (typeof aosInit === 'function') {
+          aosInit();
+        }
+      }, false);
+    });
+
+  });
+
+  /**
+   * Frequently Asked Questions Toggle
+   */
+  document.querySelectorAll('.faq-item h3, .faq-item .faq-toggle').forEach((faqItem) => {
+    faqItem.addEventListener('click', () => {
+      faqItem.parentNode.classList.toggle('faq-active');
+    });
+  });
+
+  /**
+   * Correct scrolling position upon page load for URLs containing hash links.
+   */
+  window.addEventListener('load', function(e) {
+    if (window.location.hash) {
+      if (document.querySelector(window.location.hash)) {
+        setTimeout(() => {
+          let section = document.querySelector(window.location.hash);
+          let scrollMarginTop = getComputedStyle(section).scrollMarginTop;
+          window.scrollTo({
+            top: section.offsetTop - parseInt(scrollMarginTop),
+            behavior: 'smooth'
+          });
+        }, 100);
+      }
     }
+  });
 
-    ;[count, avg].forEach((el) => el.addEventListener('input', render))
-    render()
-  })
-}
+  /**
+   * Navmenu Scrollspy
+   */
+  let navmenulinks = document.querySelectorAll('.navmenu a');
 
-onReady(() => {
-  initBase()
-  initCalculator()
-})
+  function navmenuScrollspy() {
+    navmenulinks.forEach(navmenulink => {
+      if (!navmenulink.hash) return;
+      let section = document.querySelector(navmenulink.hash);
+      if (!section) return;
+      let position = window.scrollY + 200;
+      if (position >= section.offsetTop && position <= (section.offsetTop + section.offsetHeight)) {
+        document.querySelectorAll('.navmenu a.active').forEach(link => link.classList.remove('active'));
+        navmenulink.classList.add('active');
+      } else {
+        navmenulink.classList.remove('active');
+      }
+    })
+  }
+  window.addEventListener('load', navmenuScrollspy);
+  document.addEventListener('scroll', navmenuScrollspy);
+
+})();

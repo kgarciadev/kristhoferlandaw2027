@@ -3,6 +3,8 @@
 
 class Template{
 
+    public $idioma;
+
 
     function __construct($idioma='ES')
     {
@@ -15,21 +17,37 @@ class Template{
     static function header($titulo,$descripcion='')
     {
 
-        return "
-            <!doctype html>
-            <html lang=\"en\" data-bs-theme=\"light\">
+        return <<<HTML
+            <!DOCTYPE html>
+            <html lang="en">
+
             <head>
-                <meta charset=\"utf-8\">
-                <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
+                <meta charset="utf-8">
+                <meta content="width=device-width, initial-scale=1.0" name="viewport">
                 <title>{$titulo}</title>
-                <meta name=\"description\" content=\"{$descripcion}\">
-                <!-- Bootstrap 6, bundled in assets/vendor/bootstrap6 (version in the JS bundle header). To load it from jsDelivr instead, replace both paths below with https://cdn.jsdelivr.net/npm/bootstrap@VERSION/dist/... -->
-                <link rel=\"stylesheet\" href=\"/assets/vendor/bootstrap6/css/bootstrap.min.css\">
-                <script type=\"importmap\">{\"imports\": {\"bootstrap\": \"./assets/vendor/bootstrap6/js/bootstrap.bundle.min.js\"}}</script>
-                <link rel=\"stylesheet\" href=\"/assets/css/base.css\">
-                <link rel=\"stylesheet\" href=\"/assets/css/style.css\">
+                <meta name="description" content="{$descripcion}">
+                <meta name="keywords" content="">
+
+                <!-- Favicons -->
+                <link href="assets/img/favicon.png" rel="icon">
+                <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+                <!-- Fonts -->
+                <link href="https://fonts.googleapis.com" rel="preconnect">
+                <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+                <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet" >
+
+                <!-- Vendor CSS Files -->
+                <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+                <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+                <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+                <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+                <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+
+                <link href="assets/css/main.css" rel="stylesheet">
             </head>
-        ". self::navegacion()."
+            <body class="index-page">
+        HTML. self::navegacion($_GET['seccion'] ?? '')."
         
         <section class=\"hero\">
             <div class=\"container\">
@@ -39,52 +57,39 @@ class Template{
     }
 
 
-    static function navegacion()
+    static function navegacion($seccion = '')
     {
-        return "
-            <header class=\"site-header\">
-                <nav class=\"navbar lg:navbar-expand\" aria-label=\"Main\">
-                    <div class=\"container\">
-                        <a class=\"wordmark\" href=\"index.html\">
-                            <svg class=\"brand-glyph\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">
-                                <rect x=\"1.25\" y=\"1.25\" width=\"21.5\" height=\"21.5\" rx=\"6.5\" stroke=\"currentColor\" stroke-width=\"1.5\"/>
-                                <path d=\"M7 16.5V7.5M7 16.5h5.5\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"/>
-                                <path d=\"M17 7.5v9M14 11h6\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" opacity=\".5\"/>
-                            </svg>
-                            <span>Ledgerline</span>
-                        </a>
+        // Marca como activo el enlace de la sección actual
+        $activoHome     = $seccion === ''         ? 'active' : '';
+        $activoUsuarios = $seccion === 'usuarios' ? 'active' : '';
 
-                        <dialog class=\"drawer drawer-end\" tabindex=\"-1\" id=\"navDrawer\" aria-labelledby=\"navDrawerLabel\">
-                            <div class=\"drawer-header\">
-                                <h5 class=\"drawer-title\" id=\"navDrawerLabel\">Menu</h5>
-                                <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"drawer\" aria-label=\"Close\"></button>
-                            </div>
-                            <div class=\"drawer-body mb-3 lg:mb-0\">
-                                <ul class=\"nav navbar-nav ms-auto lg:gap-5\">
-                                    <li class=\"nav-item\"><a class=\"nav-link\" href=\"#product\">Product</a></li>
-                                    <li class=\"nav-item\"><a class=\"nav-link\" href=\"#developers\">Developers</a></li>
-                                    <li class=\"nav-item\"><a class=\"nav-link\" href=\"pricing.html\">Pricing</a></li>
-                                    <li class=\"nav-item\"><a class=\"nav-link\" href=\"#security\">Security</a></li>
-                                </ul>
-                            </div>
-                        </dialog>
+        return <<<HTML
+            <header id="header" class="header d-flex align-items-center fixed-top">
+                <div class="container-fluid position-relative d-flex align-items-center justify-content-between">
 
-                        <div class=\"d-flex align-items-center gap-3 ms-auto\">
-                            <button class=\"btn-icon\" type=\"button\" id=\"themeToggle\" aria-label=\"Toggle color mode\">
-                                <svg class=\"theme-icon-light\" width=\"18\" height=\"18\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" aria-hidden=\"true\"><circle cx=\"8\" cy=\"8\" r=\"3.25\"/><path d=\"M8 1v1.5M8 13.5V15M15 8h-1.5M2.5 8H1m11-4-1 1M5 11l-1 1m0-8 1 1m6 6 1 1\"/></svg>
-                                <svg class=\"theme-icon-dark\" width=\"18\" height=\"18\" viewBox=\"0 0 16 16\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278\"/></svg>
-                            </button>
-                            <a class=\"btn-text theme-secondary sign-in\" href=\"#developers\">Sign in</a>
-                            <a class=\"btn-solid theme-primary\" href=\"pricing.html\">Start building</a>
-                            <button class=\"btn-icon navbar-toggler\" type=\"button\" data-bs-toggle=\"drawer\" data-bs-target=\"#navDrawer\" aria-controls=\"navDrawer\" aria-label=\"Open navigation\">
-                                <span class=\"navbar-toggler-icon\" aria-hidden=\"true\"></span>
-                            </button>
-                        </div>
-                    </div>
-                </nav>
+                  <a href="index.php" class="logo d-flex align-items-center me-auto me-xl-0">
+                    <h1 class="sitename">Kristhofer</h1>
+                  </a>
+
+                  <nav id="navmenu" class="navmenu">
+                    <ul>
+                      <li><a href="index.php" class="{$activoHome}">Home</a></li>
+                      <li><a href="index.php?seccion=usuarios" class="{$activoUsuarios}">Usuarios</a></li>
+                    </ul>
+                    <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+                  </nav>
+
+                  <div class="header-social-links">
+                    <a href="#" class="twitter"><i class="bi bi-twitter-x"></i></a>
+                    <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                  </div>
+
+                </div>
             </header>
 
-        ";
+        HTML;
 
 
 
@@ -93,65 +98,95 @@ class Template{
 
     static function footer()
     {
-        return "
-                </div>
-            </section>
-                    <footer class=\"site-footer section pb-6\">
-                        <div class=\"container\">
-                            <div class=\"row g-6\">
-                                <div class=\"lg:col-4\">
-                                    <p class=\"wordmark mb-4\">
-                                        <svg class=\"brand-glyph\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">
-                                            <rect x=\"1.25\" y=\"1.25\" width=\"21.5\" height=\"21.5\" rx=\"6.5\" stroke=\"currentColor\" stroke-width=\"1.5\"/>
-                                            <path d=\"M7 16.5V7.5M7 16.5h5.5\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"/>
-                                            <path d=\"M17 7.5v9M14 11h6\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" opacity=\".5\"/>
-                                        </svg>
-                                        <span>Ledgerline</span>
-                                    </p>
-                                    <p class=\"fg-2 fs-sm mb-0\" style=\"max-width:22rem\">
-                                        Payments, payouts and a double-entry ledger behind one API. Priced so
-                                        you can work out the bill yourself.
-                                    </p>
-                                </div>
-                                <div class=\"md:col-4 lg:col-2\">
-                                    <p class=\"eyebrow fs-xs fg-3 mb-4\">Product</p>
-                                    <ul class=\"link-list\">
-                                        <li><a href=\"index.html#product\">Payments</a></li>
-                                        <li><a href=\"index.html#product\">Payouts</a></li>
-                                        <li><a href=\"index.html#product\">Ledger API</a></li>
-                                        <li><a href=\"pricing.html\">Pricing</a></li>
-                                    </ul>
-                                </div>
-                                <div class=\"md:col-4 lg:col-2\">
-                                    <p class=\"eyebrow fs-xs fg-3 mb-4\">Developers</p>
-                                    <ul class=\"link-list\">
-                                        <li><a href=\"index.html#developers\">Quickstart</a></li>
-                                        <li><a href=\"index.html#developers\">API reference</a></li>
-                                        <li><a href=\"index.html#developers\">Status</a></li>
-                                        <li><a href=\"index.html#security\">Security</a></li>
-                                    </ul>
-                                </div>
-                                <div class=\"md:col-4 lg:col-4\">
-                                    <p class=\"eyebrow fs-xs fg-3 mb-4\">Regulatory</p>
-                                    <p class=\"fg-2 fs-sm mb-0\">
-                                        Ledgerline is a fictional company in a free website template. Nothing
-                                        here is a real financial product, a real rate, or regulated by anyone.
-                                    </p>
-                                </div>
-                            </div>
+        return <<<HTML
+                </section>
+                <footer id="footer" class="footer dark-background">
 
-                            <hr class=\"my-6\">
-
-                            <p class=\"fs-xs fg-3 mb-0\">&copy; <span data-year>\". date('Y') .\"</span> Ledgerline &mdash; a free Bootstrap 6 template.</p>
+                    <div class="container footer-top">
+                      <div class="row gy-4">
+                        <div class="col-lg-4 col-md-6 footer-about">
+                          <a href="index.php" class="d-flex align-items-center">
+                            <span class="sitename">Knight</span>
+                          </a>
+                          <div class="footer-contact pt-3">
+                            <p>A108 Adam Street</p>
+                            <p>New York, NY 535022</p>
+                            <p class="mt-3"><strong>Phone:</strong> <span>+1 5589 55488 55</span></p>
+                            <p><strong>Email:</strong> <span>info@example.com</span></p>
+                          </div>
                         </div>
-                    </footer>
 
-                    <script type=\"module\" src=\"assets/js/main.js\"></script>
+                        <div class="col-lg-2 col-md-3 footer-links">
+                          <h4>Useful Links</h4>
+                          <ul>
+                            <li><i class="bi bi-chevron-right"></i> <a href="#">Home</a></li>
+                            <li><i class="bi bi-chevron-right"></i> <a href="#">About us</a></li>
+                            <li><i class="bi bi-chevron-right"></i> <a href="#">Services</a></li>
+                            <li><i class="bi bi-chevron-right"></i> <a href="#">Terms of service</a></li>
+                          </ul>
+                        </div>
+
+                        <div class="col-lg-2 col-md-3 footer-links">
+                          <h4>Our Services</h4>
+                          <ul>
+                            <li><i class="bi bi-chevron-right"></i> <a href="#">Web Design</a></li>
+                            <li><i class="bi bi-chevron-right"></i> <a href="#">Web Development</a></li>
+                            <li><i class="bi bi-chevron-right"></i> <a href="#">Product Management</a></li>
+                            <li><i class="bi bi-chevron-right"></i> <a href="#">Marketing</a></li>
+                          </ul>
+                        </div>
+
+                        <div class="col-lg-4 col-md-12">
+                          <h4>Follow Us</h4>
+                          <p>Cras fermentum odio eu feugiat lide par naso tierra videa magna derita valies</p>
+                          <div class="social-links d-flex">
+                            <a href=""><i class="bi bi-twitter-x"></i></a>
+                            <a href=""><i class="bi bi-facebook"></i></a>
+                            <a href=""><i class="bi bi-instagram"></i></a>
+                            <a href=""><i class="bi bi-linkedin"></i></a>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+
+                    <div class="container copyright text-center mt-4">
+                      <p>© <span>Copyright</span> <strong class="px-1 sitename">Knight</strong> <span>All Rights Reserved</span></p>
+                      <div class="credits">
+                        <!-- All the links in the footer should remain intact. -->
+                        <!-- You can delete the links only if you've purchased the pro version. -->
+                        <!-- Licensing information: https://bootstrapmade.com/license/ -->
+                        <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
+                        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> | <a href="https://bootstrapmade.com/tools/">DevTools</a>
+                      </div>
+                    </div>
+                        
+                  </footer>
+                        
+                  <!-- Scroll Top -->
+                  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+                        
+                  <!-- Preloader -->
+                  <div id="preloader"></div>
+                        
+                  <!-- Vendor JS Files -->
+                  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+                  <script src="assets/vendor/php-email-form/validate.js"></script>
+                  <script src="assets/vendor/aos/aos.js"></script>
+                  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+                  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+                  <script src="assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+                  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+                        
+                  <!-- Main JS File -->
+                  <script src="assets/js/main.js"></script>
+                        
                 </body>
-            </html>
+                        
+                </html>
 
 
-        ";
+        HTML;
 
 
 
@@ -161,7 +196,3 @@ class Template{
 
 
 }
-
-
-
-

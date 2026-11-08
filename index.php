@@ -3,51 +3,39 @@
     require_once "includes/general.php";
 
 
-    echo Template::header('Lanzarote');
+    echo Template::header('Kristhofer');
 
-    switch($_GET['seccion'])
+    switch($_GET['seccion'] ?? '')
     {
         case 'usuarios':
-            //Cargamos la sección usuarios
+            require "includes/usuarios.php";   // lógica: BD, crear/editar/eliminar
+            require "vistas/usuarios.php";     // HTML de la sección
         break;
 
         default:
-
-
             echo "
-            
-                <div id=\"carouselStacked\" class=\"carousel slide\">
-                    <div class=\"d-flex justify-content-between align-items-center\">
-                        <h5 class=\"mb-0\">Top controls</h5>
-                        <div>
-                        <button class=\"btn-icon btn-sm\" type=\"button\" data-bs-target=\"#carouselStacked\" data-bs-slide=\"prev\">
-                            <span class=\"carousel-icon-prev\" aria-hidden=\"true\"></span>
-                            <span class=\"visually-hidden\">Previous</span>
-                        </button>
-                        <button class=\"btn-icon btn-sm\" type=\"button\" data-bs-target=\"#carouselStacked\" data-bs-slide=\"next\">
-                            <span class=\"carousel-icon-next\" aria-hidden=\"true\"></span>
-                            <span class=\"visually-hidden\">Next</span>
-                        </button>
-                        </div>
-                    </div>
+                <div id=\"carouselStacked\" class=\"carousel slide w-100\">
                     <div class=\"carousel-inner rounded-5\">
                         <div class=\"carousel-item active\">
-                        <img src=\"/img/fondo1.jpeg\" class=\"d-block w-100\" alt=\"...\">
+                            <img src=\"img/fondo1.jpeg\" class=\"d-block w-100\" alt=\"...\">
                         </div>
                         <div class=\"carousel-item\">
-                        <img src=\"/img/fondo2.avif\" class=\"d-block w-100\" alt=\"...\">
+                            <img src=\"img/fondo2.avif\" class=\"d-block w-100\" alt=\"...\">
                         </div>
                         <div class=\"carousel-item\">
-                        <img src=\"/img/fondo3.avif\" class=\"d-block w-100\" alt=\"...\">
+                            <img src=\"img/fondo3.avif\" class=\"d-block w-100\" alt=\"...\">
                         </div>
                     </div>
+                    <button class=\"carousel-control-prev\" type=\"button\" data-bs-target=\"#carouselStacked\" data-bs-slide=\"prev\">
+                        <span class=\"carousel-control-prev-icon\" aria-hidden=\"true\"></span>
+                        <span class=\"visually-hidden\">Anterior</span>
+                    </button>
+                    <button class=\"carousel-control-next\" type=\"button\" data-bs-target=\"#carouselStacked\" data-bs-slide=\"next\">
+                        <span class=\"carousel-control-next-icon\" aria-hidden=\"true\"></span>
+                        <span class=\"visually-hidden\">Siguiente</span>
+                    </button>
                 </div>
-                            
-            
-            
-            ";    
-
-
+            ";
         break;
     }
 
