@@ -1,17 +1,12 @@
 <?php
-/*
- * vistas/usuarios.php
- * -------------------
- * HTML de la sección "usuarios" (adaptado de crud/vista.php).
- * Sin <html>, <head> ni <body>: eso lo ponen Template::header() y Template::footer().
- */
-
 /** @var string $metodo */
 /** @var string $mensaje */
 /** @var array $usuarios */
 /** @var array|null $editando */
+/** @var int $pagina */
+/** @var int $totalPaginas */
+/** @var string $url */
 
-$url = '?seccion=usuarios';
 ?>
 <div class="w-100" data-bs-theme="dark">
 
@@ -97,6 +92,28 @@ $url = '?seccion=usuarios';
                 </tbody>
             </table>
         </div>
+    <?php endif; ?>
+
+    <?php if ($totalPaginas > 1): ?>
+        <nav aria-label="Paginación de usuarios" class="mt-4">
+            <ul class="pagination justify-content-center">
+                <?php if ($pagina > 0): ?>
+                    <li class="page-item">
+                        <a class="page-link" href="?seccion=usuarios&pagina=<?= $pagina - 1 ?>">Anterior</a>
+                    </li>
+                <?php endif; ?>
+ 
+                <li class="page-item disabled">
+                    <span class="page-link">Página <?= $pagina + 1 ?> de <?= $totalPaginas ?></span>
+                </li>
+ 
+                <?php if ($pagina < $totalPaginas - 1): ?>
+                    <li class="page-item">
+                        <a class="page-link" href="?seccion=usuarios&pagina=<?= $pagina + 1 ?>">Siguiente</a>
+                    </li>
+                <?php endif; ?>
+            </ul>
+        </nav>
     <?php endif; ?>
 
 </div>
