@@ -1,6 +1,6 @@
 <?php
 
-$servidor   = 'localhost';
-$usuario    = 'tu_usuario';
-$contraseña = 'tu_contraseña';
-$base_datos = 'nombre_base_datos';
+define('DB_HOST', 'localhost');
+define('DB_USER', 'tu_usuario');
+define('DB_PASS', 'tu_contraseña');
+define('DB_NAME', 'tu_base_de_datos');
