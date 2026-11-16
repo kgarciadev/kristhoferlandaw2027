@@ -1,121 +1,71 @@
 # kristhoferlandaw2027
 
-Sitio web en PHP con la plantilla **Knight** (Bootstrap 5) y una sección de **gestión de usuarios** (CRUD) conectada a MySQL con `mysqli` orientado a objetos.
-
-## Características
-
-- Plantilla común (cabecera, menú y footer) generada desde la clase `Template`.
-- Navegación por secciones con `index.php?seccion=...`; el menú marca la sección activa.
-- Portada con carrusel de imágenes.
-- Sección **Usuarios**: registrar, listar, editar y eliminar usuarios.
-  - Consultas preparadas (`prepare` + `bind_param`).
-  - Aviso si el email ya está registrado.
-  - Si falla la base de datos, la página se muestra igualmente con un mensaje de error.
+Web en PHP con la plantilla **Knight** (Bootstrap 5) y una sección para gestionar usuarios (crear, listar, editar y eliminar) guardados en MySQL.
 
 ## Requisitos
 
-- Apache 2 con PHP 8 (probado con PHP 8.5).
-- Extensión `mysqli` de PHP.
-- MySQL / MariaDB.
+- Apache con PHP 8 y la extensión `mysqli`.
+- MySQL o MariaDB.
 
 ## Instalación
 
-1. **Clonar el repositorio** dentro de la carpeta que sirve Apache:
+1. Clona el repositorio en la carpeta de Apache:
 
    ```bash
    git clone https://github.com/kgarciadev/kristhoferlandaw2027.git
    ```
 
-2. **Crear la base de datos y la tabla:**
+2. Crea una base de datos y carga la tabla con datos de ejemplo:
 
-   ```sql
-   CREATE DATABASE gestion_usuarios CHARACTER SET utf8mb4;
-   USE gestion_usuarios;
-
-   CREATE TABLE usuarios (
-     id     INT NOT NULL AUTO_INCREMENT,
-     nombre VARCHAR(50)  NOT NULL,
-     email  VARCHAR(100) NOT NULL,
-     edad   INT DEFAULT NULL,
-     PRIMARY KEY (id),
-     UNIQUE KEY email (email)
-   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+   ```bash
+   mysql -u tu_usuario -p tu_base_de_datos < tables/create_table_usuarios.sql
    ```
 
-3. **Configurar la conexión.** Copia la plantilla y pon tus datos reales:
+3. Copia la configuración y pon tus datos:
 
    ```bash
    cp includes/config.example.php includes/config.php
    ```
 
    ```php
-   $servidor   = 'localhost';
-   $usuario    = 'tu_usuario';
-   $contraseña = 'tu_contraseña';
-   $base_datos = 'gestion_usuarios';
+   define('DB_HOST', 'localhost');
+   define('DB_USER', 'tu_usuario');
+   define('DB_PASS', 'tu_contraseña');
+   define('DB_NAME', 'tu_base_de_datos');
    ```
 
-   > `includes/config.php` está en `.gitignore`: **nunca se sube al repositorio**, así las credenciales no quedan públicas.
+   `includes/config.php` está en `.gitignore`, así que no se sube al repositorio.
 
-4. Abrir en el navegador, por ejemplo `http://kristho.fer/kristhoferlandaw2027/`.
+4. Abre la web en el navegador.
 
 ## Uso
 
 | URL | Qué muestra |
 | --- | --- |
-| `index.php` | Portada con el carrusel |
-| `index.php?seccion=usuarios` | Gestión de usuarios |
-| `index.php?seccion=usuarios&editar=3` | Formulario con el usuario 3 cargado para editarlo |
+| `index.php` | Portada con carrusel |
+| `index.php?seccion=usuarios` | Lista de usuarios (10 por página) |
+| `index.php?seccion=usuarios&pagina=1` | Segunda página de la lista |
+| `index.php?seccion=usuarios&editar=3` | Formulario para editar el usuario 3 |
 
 ## Estructura
 
 ```
-kristhoferlandaw2027/
-├── index.php                 # Punto de entrada: elige la sección con ?seccion=
+├── index.php              # Entrada: elige la sección con ?seccion=
 ├── includes/
-│   ├── general.php           # Autocarga de clases (includes/class.<nombre>.php)
-│   ├── class.template.php    # Clase Template: header(), navegacion(), footer()
-│   ├── usuarios.php          # Lógica de usuarios (conexión mysqli y CRUD)
-│   ├── config.example.php    # Plantilla de configuración (sí se sube)
-│   └── config.php            # Credenciales reales (NO se sube)
+│   ├── general.php        # Autocarga de clases y constantes
+│   ├── class.template.php # Cabecera, menú y footer
+│   ├── bbdd/
+│   │   ├── class.bbdd.php  # Conexión a la base de datos
+│   │   └── class.query.php # Ejecuta consultas
+│   ├── usuarios.php       # Lógica de la sección usuarios
+│   └── config.example.php # Plantilla de configuración
 ├── vistas/
-│   └── usuarios.php          # HTML de la sección usuarios (Bootstrap, tema oscuro)
-├── assets/                   # CSS, JS y librerías de la plantilla Knight
-├── forms/                    # Scripts de los formularios de la plantilla (newsletter, contacto)
-└── img/                      # Imágenes propias (carrusel, etc.)
-```
-
-### Cómo funciona una sección
-
-`index.php` pinta la cabecera, carga la sección pedida y pinta el footer:
-
-```php
-echo Template::header('Kristhofer');
-
-switch ($_GET['seccion'] ?? '') {
-    case 'usuarios':
-        require "includes/usuarios.php";   // prepara $mensaje, $usuarios, $editando...
-        require "vistas/usuarios.php";     // muestra esos datos
-        break;
-    default:
-        // portada
-}
-
-echo Template::footer();
-```
-
-Para añadir una sección nueva:
-
-1. Crea su lógica en `includes/` y su HTML en `vistas/`.
-2. Añade un `case` en `index.php`.
-3. Añade el enlace en `Template::navegacion()`.
-
-## Errores
-
-En el servidor, `display_errors` está desactivado, así que los errores de PHP no aparecen en la página. Se guardan en el log de Apache:
-
-```bash
-tail -f /var/log/apache2/kristho.fer.error.log
+│   └── usuarios.php       # HTML de la sección usuarios
+├── tables/
+│   └── create_table_usuarios.sql
+├── assets/                # CSS, JS y librerías de la plantilla
+├── forms/                 # Formularios de la plantilla
+└── img/                   # Imágenes propias
 ```
 
 ## Créditos
