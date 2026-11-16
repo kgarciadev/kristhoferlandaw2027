@@ -103,11 +103,17 @@
                     </li>
                 <?php endif; ?>
  
-                <li class="page-item disabled">
-                    <span class="page-link">Página <?= $pagina + 1 ?> de <?= $totalPaginas ?></span>
+                <?php for ($i = 1; $i <= $totalPaginas; $i++) {
+                    $classCurrentLink = ($pagina === ($i-1)) ? 'page-item disabled' : 'page-item';
+                    ?>
+            
+                <li class="<?=  $classCurrentLink ?>">
+                    <a class="page-link" href="?seccion=usuarios&pagina=<?= $i-1 ?>"><?= $i ?></a>
                 </li>
  
-                <?php if ($pagina < $totalPaginas - 1): ?>
+                <?php 
+                }
+                if ($pagina < $totalPaginas - 1): ?>
                     <li class="page-item">
                         <a class="page-link" href="?seccion=usuarios&pagina=<?= $pagina + 1 ?>">Siguiente</a>
                     </li>
