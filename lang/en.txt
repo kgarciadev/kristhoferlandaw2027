@@ -1,0 +1,45 @@
+usuarios:Users
+eliminacion:Deletion
+modificacion:Modification
+alta:Addition
+error_caracteres:%s must contain at least %s characters
+error_formato_invalido:%s does not have a valid format
+operacion_exito:Operation completed successfully
+introduce_tu:Enter your %s
+email_generico:name@domain.com
+nombre:First Name
+apellido1:Last Name
+apellido2:Second Last Name
+fecha_nacimiento:Date of Birth
+email:E-mail
+alta_usuario:User Registration
+anterior:Previous
+siguiente:Next
+inicio:Home
+gestion_usuarios:User management
+editar_usuario:Edit user
+edad:Age
+guardar_cambios:Save changes
+registrar:Register
+cancelar:Cancel
+usuarios_registrados:Registered users
+sin_usuarios:There are no registered users.
+id:ID
+acciones:Actions
+editar:Edit
+eliminar:Delete
+confirmar_eliminar:Delete this user?
+paginacion_usuarios:User pagination
+enlaces_utiles:Useful Links
+sobre_nosotros:About us
+servicios:Services
+terminos_servicio:Terms of service
+nuestros_servicios:Our Services
+diseno_web:Web Design
+desarrollo_web:Web Development
+gestion_producto:Product Management
+marketing:Marketing
+siguenos:Follow Us
+telefono:Phone
+derechos_reservados:All Rights Reserved
+disenado_por:Designed by

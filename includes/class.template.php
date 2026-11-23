@@ -16,10 +16,12 @@ class Template{
 
     static function header($titulo,$descripcion='')
     {
+        Idioma::getInstancia();          // carga el fichero de idioma y fija Idioma::$codigo
+        $codigo = Idioma::$codigo;
 
         return <<<HTML
             <!DOCTYPE html>
-            <html lang="en">
+            <html lang="{$codigo}">
 
             <head>
                 <meta charset="utf-8">
@@ -44,6 +46,8 @@ class Template{
                 <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
                 <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
 
+                <link href="css/estilos.css" rel="stylesheet">
+
                 <link href="assets/css/main.css" rel="stylesheet">
             </head>
             <body class="index-page">
@@ -63,6 +67,9 @@ class Template{
         $activoHome     = $seccion === ''         ? 'active' : '';
         $activoUsuarios = $seccion === 'usuarios' ? 'active' : '';
 
+        // Atajo para usar los literales dentro del heredoc: {$lit('clave')}
+        $lit = Idioma::lit(...);
+
         return <<<HTML
             <header id="header" class="header d-flex align-items-center fixed-top">
                 <div class="container-fluid position-relative d-flex align-items-center justify-content-between">
@@ -73,8 +80,8 @@ class Template{
 
                   <nav id="navmenu" class="navmenu">
                     <ul>
-                      <li><a href="index.php" class="{$activoHome}">Home</a></li>
-                      <li><a href="index.php?seccion=usuarios" class="{$activoUsuarios}">Usuarios</a></li>
+                      <li><a href="index.php" class="{$activoHome}">{$lit('inicio')}</a></li>
+                      <li><a href="index.php?seccion=usuarios" class="{$activoUsuarios}">{$lit('usuarios')}</a></li>
                     </ul>
                     <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
                   </nav>
@@ -84,7 +91,14 @@ class Template{
                     <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
                     <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
                     <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                    <div class="banderas">
+                    <a href="http://kristho.fer/kristhoferlandaw2027/"><img src="img/flags/es.svg" /></a>
+                    <a href="http://en.kristho.fer/kristhoferlandaw2027/"><img src="img/flags/en.svg" /></a>
+                    <a href="http://de.kristho.fer/kristhoferlandaw2027/"><img src="img/flags/de.svg" /></a>
+                    </div>
                   </div>
+
+                  
 
                 </div>
             </header>
@@ -98,6 +112,9 @@ class Template{
 
     static function footer()
     {
+        // Atajo para usar los literales dentro del heredoc: {$lit('clave')}
+        $lit = Idioma::lit(...);
+
         return <<<HTML
                 </section>
                 <footer id="footer" class="footer dark-background">
@@ -111,33 +128,33 @@ class Template{
                           <div class="footer-contact pt-3">
                             <p>A108 Adam Street</p>
                             <p>New York, NY 535022</p>
-                            <p class="mt-3"><strong>Phone:</strong> <span>+1 5589 55488 55</span></p>
-                            <p><strong>Email:</strong> <span>info@example.com</span></p>
+                            <p class="mt-3"><strong>{$lit('telefono')}:</strong> <span>+1 5589 55488 55</span></p>
+                            <p><strong>{$lit('email')}:</strong> <span>info@example.com</span></p>
                           </div>
                         </div>
 
                         <div class="col-lg-2 col-md-3 footer-links">
-                          <h4>Useful Links</h4>
+                          <h4>{$lit('enlaces_utiles')}</h4>
                           <ul>
-                            <li><i class="bi bi-chevron-right"></i> <a href="#">Home</a></li>
-                            <li><i class="bi bi-chevron-right"></i> <a href="#">About us</a></li>
-                            <li><i class="bi bi-chevron-right"></i> <a href="#">Services</a></li>
-                            <li><i class="bi bi-chevron-right"></i> <a href="#">Terms of service</a></li>
+                            <li><i class="bi bi-chevron-right"></i> <a href="index.php">{$lit('inicio')}</a></li>
+                            <li><i class="bi bi-chevron-right"></i> <a href="#">{$lit('sobre_nosotros')}</a></li>
+                            <li><i class="bi bi-chevron-right"></i> <a href="#">{$lit('servicios')}</a></li>
+                            <li><i class="bi bi-chevron-right"></i> <a href="#">{$lit('terminos_servicio')}</a></li>
                           </ul>
                         </div>
 
                         <div class="col-lg-2 col-md-3 footer-links">
-                          <h4>Our Services</h4>
+                          <h4>{$lit('nuestros_servicios')}</h4>
                           <ul>
-                            <li><i class="bi bi-chevron-right"></i> <a href="#">Web Design</a></li>
-                            <li><i class="bi bi-chevron-right"></i> <a href="#">Web Development</a></li>
-                            <li><i class="bi bi-chevron-right"></i> <a href="#">Product Management</a></li>
-                            <li><i class="bi bi-chevron-right"></i> <a href="#">Marketing</a></li>
+                            <li><i class="bi bi-chevron-right"></i> <a href="#">{$lit('diseno_web')}</a></li>
+                            <li><i class="bi bi-chevron-right"></i> <a href="#">{$lit('desarrollo_web')}</a></li>
+                            <li><i class="bi bi-chevron-right"></i> <a href="#">{$lit('gestion_producto')}</a></li>
+                            <li><i class="bi bi-chevron-right"></i> <a href="#">{$lit('marketing')}</a></li>
                           </ul>
                         </div>
 
                         <div class="col-lg-4 col-md-12">
-                          <h4>Follow Us</h4>
+                          <h4>{$lit('siguenos')}</h4>
                           <p>Cras fermentum odio eu feugiat lide par naso tierra videa magna derita valies</p>
                           <div class="social-links d-flex">
                             <a href=""><i class="bi bi-twitter-x"></i></a>
@@ -151,13 +168,13 @@ class Template{
                     </div>
 
                     <div class="container copyright text-center mt-4">
-                      <p>© <span>Copyright</span> <strong class="px-1 sitename">Knight</strong> <span>All Rights Reserved</span></p>
+                      <p>© <span>Copyright</span> <strong class="px-1 sitename">Knight</strong> <span>{$lit('derechos_reservados')}</span></p>
                       <div class="credits">
                         <!-- All the links in the footer should remain intact. -->
                         <!-- You can delete the links only if you've purchased the pro version. -->
                         <!-- Licensing information: https://bootstrapmade.com/license/ -->
                         <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
-                        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> | <a href="https://bootstrapmade.com/tools/">DevTools</a>
+                        {$lit('disenado_por')} <a href="https://bootstrapmade.com/">BootstrapMade</a> | <a href="https://bootstrapmade.com/tools/">DevTools</a>
                       </div>
                     </div>
                         

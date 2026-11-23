@@ -1,0 +1,45 @@
+usuarios:Usuarios
+eliminacion:Eliminación
+modificacion:Modificación
+alta:Alta
+error_caracteres:el %s debe tener al menos %s caracteres
+error_formato_invalido:%s no tiene un formato válido
+operacion_exito:Operación realizada con éxito
+introduce_tu:Introduce tu %s
+email_generico:nombre@dominio.es
+nombre:Nombre
+apellido1:Primer Apellido
+apellido2:Segundo Apellido
+fecha_nacimiento:Fecha Nacimiento
+email:E-mail
+alta_usuario:Alta de usuario
+anterior:Anterior
+siguiente:Siguiente
+inicio:Inicio
+gestion_usuarios:Gestión de usuarios
+editar_usuario:Editar usuario
+edad:Edad
+guardar_cambios:Guardar cambios
+registrar:Registrar
+cancelar:Cancelar
+usuarios_registrados:Usuarios registrados
+sin_usuarios:No hay usuarios registrados.
+id:ID
+acciones:Acciones
+editar:Editar
+eliminar:Eliminar
+confirmar_eliminar:¿Eliminar este usuario?
+paginacion_usuarios:Paginación de usuarios
+enlaces_utiles:Enlaces útiles
+sobre_nosotros:Sobre nosotros
+servicios:Servicios
+terminos_servicio:Términos del servicio
+nuestros_servicios:Nuestros servicios
+diseno_web:Diseño web
+desarrollo_web:Desarrollo web
+gestion_producto:Gestión de producto
+marketing:Marketing
+siguenos:Síguenos
+telefono:Teléfono
+derechos_reservados:Todos los derechos reservados
+disenado_por:Diseñado por

@@ -28,11 +28,11 @@
                     </div>
                     <button class=\"carousel-control-prev\" type=\"button\" data-bs-target=\"#carouselStacked\" data-bs-slide=\"prev\">
                         <span class=\"carousel-control-prev-icon\" aria-hidden=\"true\"></span>
-                        <span class=\"visually-hidden\">Anterior</span>
+                        <span class=\"visually-hidden\">" . Idioma::lit('anterior') . "</span>
                     </button>
                     <button class=\"carousel-control-next\" type=\"button\" data-bs-target=\"#carouselStacked\" data-bs-slide=\"next\">
                         <span class=\"carousel-control-next-icon\" aria-hidden=\"true\"></span>
-                        <span class=\"visually-hidden\">Siguiente</span>
+                        <span class=\"visually-hidden\">" . Idioma::lit('siguiente') . "</span>
                     </button>
                 </div>
             ";

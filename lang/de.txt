@@ -1,0 +1,45 @@
+usuarios:Benutzer
+eliminacion:Löschung
+modificacion:Änderung
+alta:Hinzufügen
+error_caracteres:%s muss mindestens %s Zeichen enthalten
+error_formato_invalido:%s hat kein gültiges Format
+operacion_exito:Vorgang erfolgreich abgeschlossen
+introduce_tu:Geben Sie Ihr(e) %s ein
+email_generico:name@domain.com
+nombre:Vorname
+apellido1:Nachname
+apellido2:Zweiter Nachname
+fecha_nacimiento:Geburtsdatum
+email:E-Mail
+alta_usuario:Benutzerregistrierung
+anterior:Zurück
+siguiente:Weiter
+inicio:Startseite
+gestion_usuarios:Benutzerverwaltung
+editar_usuario:Benutzer bearbeiten
+edad:Alter
+guardar_cambios:Änderungen speichern
+registrar:Registrieren
+cancelar:Abbrechen
+usuarios_registrados:Registrierte Benutzer
+sin_usuarios:Es gibt keine registrierten Benutzer.
+id:ID
+acciones:Aktionen
+editar:Bearbeiten
+eliminar:Löschen
+confirmar_eliminar:Diesen Benutzer löschen?
+paginacion_usuarios:Benutzer-Seitennavigation
+enlaces_utiles:Nützliche Links
+sobre_nosotros:Über uns
+servicios:Leistungen
+terminos_servicio:Nutzungsbedingungen
+nuestros_servicios:Unsere Leistungen
+diseno_web:Webdesign
+desarrollo_web:Webentwicklung
+gestion_producto:Produktmanagement
+marketing:Marketing
+siguenos:Folgen Sie uns
+telefono:Telefon
+derechos_reservados:Alle Rechte vorbehalten
+disenado_por:Gestaltet von

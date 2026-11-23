@@ -1,5 +1,7 @@
 <?php
 
+$usuario = new Usuario();
+
 $mensaje = "";
 $usuarios = [];
 $editando = null;
@@ -13,16 +15,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = (int) ($_POST['id'] ?? 0);
     $edad = ($_POST['edad'] ?? '') !== '' ? (int) $_POST['edad'] : null;
 
+    $datos = [
+        'nombre' => $_POST['nombre'] ?? '',
+        'email'  => $_POST['email'] ?? '',
+        'edad'   => $edad,
+    ];
+
     try {
         switch ($accion) {
             case 'crear':
-                $query = new Query("INSERT INTO usuarios (nombre, email, edad) VALUES (?, ?, ?)", [$_POST['nombre'] ?? '', $_POST['email'] ?? '', $edad]);
+                $usuario->crear($datos);
                 $mensaje = "Usuario registrado correctamente.";
                 break;
 
             case 'actualizar':
-                $query = new Query("UPDATE usuarios SET nombre = ?, email = ?, edad = ? WHERE id = ?", [$_POST['nombre'] ?? '', $_POST['email'] ?? '', $edad, $id]);
-                if ($query->total > 0) {
+                if ($usuario->actualizar($id, $datos) > 0) {
                     $mensaje = "Usuario actualizado correctamente.";
                 } else {
                     $mensaje = "No se realizaron cambios en el usuario.";
@@ -30,8 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 break;
 
             case 'eliminar':
-                $query = new Query("DELETE FROM usuarios WHERE id = ?", [$id]);
-                if ($query->total > 0) {
+                if ($usuario->eliminar($id) > 0) {
                     $mensaje = "Usuario eliminado correctamente.";
                 } else {
                     $mensaje = "No se encontró el usuario para eliminar.";
@@ -50,25 +56,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 try {
     if (isset($_GET['editar'])) {
-        $query = new Query("SELECT * FROM usuarios WHERE id = ?", [(int) $_GET['editar']]);
-        $editando = $query->recover();
+        $editando = $usuario->buscar((int) $_GET['editar']);
 
         if($editando === null && $mensaje === '') {
             $mensaje = "No se encontró el usuario para editar.";
         }
     }
 
-    $query = new Query("SELECT COUNT(*) AS total FROM usuarios");
-    $totalUsuarios = (int) $query->recover()['total'];
+    $totalUsuarios = $usuario->contar();
     $totalPaginas = max(1, (int) ceil($totalUsuarios / TOTAL_PAGINAS_LISTADO));
 
     $pagina = min($pagina, $totalPaginas - 1);
 
     $offset = $pagina * TOTAL_PAGINAS_LISTADO;
-    $query = new Query("SELECT * FROM usuarios ORDER BY id LIMIT " . TOTAL_PAGINAS_LISTADO . " OFFSET " . $offset);
-    while ($fila = $query->recover()) {
-        $usuarios[] = $fila;
-    } 
+    $usuarios = $usuario->listar(TOTAL_PAGINAS_LISTADO, $offset);
 } catch (mysqli_sql_exception $e) {
     error_log($e->getMessage());
     $mensaje = "Error: no se pudo recuperar la lista de usuarios. Por favor, inténtelo de nuevo.";
@@ -79,4 +80,3 @@ try {
 }
 
 $url = "?seccion=usuarios&pagina={$pagina}";
-
