@@ -7,17 +7,17 @@ $usuarios = [];
 $editando = null;
 $totalPaginas = 1;
 
-$pagina = max(0, (int) ($_GET['pagina'] ?? 0));
+$pagina = max(0, (int) Campo::val('pagina'));
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    $accion = $_POST['accion'] ?? '';
-    $id = (int) ($_POST['id'] ?? 0);
-    $edad = ($_POST['edad'] ?? '') !== '' ? (int) $_POST['edad'] : null;
+    $accion = Campo::val('accion');
+    $id = (int) Campo::val('id');
+    $edad = Campo::val('edad') !== '' ? (int) Campo::val('edad') : null;
 
     $datos = [
-        'nombre' => $_POST['nombre'] ?? '',
-        'email'  => $_POST['email'] ?? '',
+        'nombre' => Campo::val('nombre'),
+        'email'  => Campo::val('email'),
         'edad'   => $edad,
     ];
 
@@ -55,8 +55,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 try {
-    if (isset($_GET['editar'])) {
-        $editando = $usuario->buscar((int) $_GET['editar']);
+    if (Campo::val('editar') !== '') {
+        $editando = $usuario->buscar((int) Campo::val('editar'));
 
         if($editando === null && $mensaje === '') {
             $mensaje = "No se encontró el usuario para editar.";

@@ -3,6 +3,7 @@
 abstract class Modelo
 {
     protected string $tabla;
+    protected array  $claves = [];
 
     protected function inicializar(array $fila): void
     {
@@ -10,6 +11,7 @@ abstract class Modelo
             if (property_exists($this, $columna)) {
                 $this->$columna = $valor;
             }
+            $this->claves[$columna] = $valor;
         }
     }
 
@@ -52,7 +54,7 @@ abstract class Modelo
         $huecos   = implode(', ', array_fill(0, count($datos), '?'));
 
         $query = new Query("INSERT INTO {$this->tabla} ({$columnas}) VALUES ({$huecos})", array_values($datos));
-        return $query->total;
+        return $query->getLastInsertId();
     }
 
     public function actualizar(int $id, array $datos): int
@@ -70,5 +72,15 @@ abstract class Modelo
     {
         $query = new Query("DELETE FROM {$this->tabla} WHERE id = ?", [$id]);
         return $query->total;
+    }
+
+    public function sincronizar_con_campo(int $id): void
+    {
+        $objeto = $this->buscar($id);
+        if ($objeto === null)
+            return;
+
+        foreach ($objeto->claves as $clave => $valor)
+            Campo::val($clave, $valor);
     }
 }

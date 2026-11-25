@@ -5,7 +5,7 @@
 
     echo Template::header('Kristhofer');
 
-    switch($_GET['seccion'] ?? '')
+    switch(Campo::val('seccion'))
     {
         case 'usuarios':
             require "includes/usuarios.php";   // lógica: BD, crear/editar/eliminar
